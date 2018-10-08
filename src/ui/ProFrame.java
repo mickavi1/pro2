@@ -43,8 +43,8 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
         toolbar.add(savebutton);
 
         button.addActionListener(action -> {
-            ToDoItem item = new ToDoItem("Test obsah");
-            model.add(item);
+            ToDoItem item = new ProDialog().getItem();     //nova instance prodialogu se zavolanim getItem
+            //model.add(item);
         });
 
         loadbutton.addActionListener(action -> {
