@@ -1,5 +1,7 @@
 package ui;
 
+import RSS.RSSParser;
+import RSS.RSSitem;
 import model.TableModel;
 import model.ToDoItem;
 
@@ -61,6 +63,23 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
         pack();
 
         setLocationRelativeTo(null);        //neni komponenta, ke ktere by se priblizil - otevreni na stredu obrazovky
+
+        parse();
+
+    }
+
+    private void parse(){
+        try {
+            RSSParser parser = new RSSParser(new FileInputStream(new File("download.xml")));
+
+            List<RSSitem> rssItems = parser.parseItems();
+            for (RSSitem rssItem: rssItems){
+                System.out.println(rssItem.toString());
+            }
+
+        } catch (FileNotFoundException e){
+
+        }
     }
 
     private void saveItems() {

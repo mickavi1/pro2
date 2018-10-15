@@ -17,15 +17,15 @@ public class ProDialog extends JDialog {
         JLabel jLabel = new JLabel("Obsah");
         add(jLabel);
 
-        JTextField jTextField = new JTextField();
-        add(jTextField);
+        JTextArea jTextArea = new JTextArea();
+        add(jTextArea);
 
         JButton btnOK = new JButton("OK");
         add(btnOK);
 
         btnOK.addActionListener(action ->{
             //plnit ToDoItem
-            item = new ToDoItem(jTextField);
+            item = new ToDoItem(jTextArea.getText());
             setVisible(false);
         });
 
