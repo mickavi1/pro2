@@ -29,7 +29,7 @@ public class RSSParser {
                 boolean title, link, description;
                 @Override
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                    if (qName.equalsIgnoreCase("item")&& item != null ){        //nazev titlu v pripade spatnych znaku
+                    if (qName.equalsIgnoreCase("item")){        //nazev titlu v pripade spatnych znaku
                         item = new RSSitem();
                     }
                     if (qName.equalsIgnoreCase("title")&& item != null){
@@ -84,5 +84,6 @@ public class RSSParser {
             return items;
         }
 
+        //http://eurofotbal
     }
 }
