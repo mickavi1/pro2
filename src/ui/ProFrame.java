@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProFrame extends JFrame {      //rozsireni o JFrame
@@ -69,8 +70,8 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
         toolbar2.add(field);
         toolbar2.add(loadUrlBtn);
         loadUrlBtn.addActionListener(action ->{
-            addFeed(field.getText());
-            readFeeds();
+            addFeedCsv(field.getText());
+            readFeedsCsv();
         });
         model = new TableModel();
 
@@ -132,13 +133,14 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
             e.printStackTrace();
         }
     }
+
     private void addFeed(String url){
         try{
             File file = new File("feed.txt");
             if (!file.exists()) {
                 file.createNewFile();
         }
-        FileWriter fileWriter = new FileWriter(file, true);
+        FileWriter fileWriter = new FileWriter(url);
         BufferedWriter writer = new BufferedWriter(fileWriter);
 
         writer.write(url);
@@ -171,5 +173,49 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
         } catch (Exception e){
 
         }
+    }
+
+    private void addFeedCsv(String url){
+        try {
+            File file = new File("feed.csv");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileWriter fileWriter = new FileWriter(file, true);
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+
+            writer.write(url);
+            writer.write(";");
+            writer.flush();
+            }
+
+        catch(Exception e){
+
+        }
+    }
+
+    private void readFeedsCsv(){
+        try{
+            List<String> urls = new ArrayList<>();
+            File file = new File("feed.csv");
+
+            FileReader fileReader = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            String line;
+            while ((line = reader.readLine()) != null){
+                urls = Arrays.asList(line.split(";"));
+            }
+            for (String url: urls){
+                System.out.println(url);
+                parse(url);
+            }
+
+
+        } catch (Exception e){
+
+        }
+
     }
 }
