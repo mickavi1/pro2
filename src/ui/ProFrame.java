@@ -2,6 +2,7 @@ package ui;
 
 import RSS.RSSParser;
 import RSS.RSSitem;
+import model.FeedItem;
 import model.TableModel;
 import model.ToDoItem;
 
@@ -70,8 +71,8 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
         toolbar2.add(field);
         toolbar2.add(loadUrlBtn);
         loadUrlBtn.addActionListener(action ->{
-            addFeedCsv(field.getText());
-            readFeedsCsv();
+            addFeed(field.getText());
+            readFeeds();
         });
         model = new TableModel();
 
@@ -174,7 +175,7 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
 
         }
     }
-
+    /*
     private void addFeedCsv(String url){
         try {
             File file = new File("feed.csv");
@@ -212,10 +213,46 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
                 parse(url);
             }
 
-
         } catch (Exception e){
 
         }
 
+    }
+    */
+
+    private List<FeedItem> getAllFeeds(){
+        List<FeedItem> feedItems = new ArrayList<>();
+        try{
+            File file = new File("feedItems.csv");
+            FileReader reader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            bufferedReader.readLine();      //preskoceni prvniho radku
+            String line;
+            while((line = bufferedReader.readLine()) != null){
+                feedItems.add(FeedItem.parseFromCSV(line));
+            }
+        } catch (Exception e){
+
+
+        }
+        return feedItems;
+    }
+
+    private void saveAllFeeds(List<FeedItem> items){
+        try{
+            File file = new File("feedItems.csv");
+            FileWriter writer = new FileWriter(file);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            bufferedWriter.write("url;addedTime;shouldShow;alias");
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+            for (FeedItem item : items){
+                bufferedWriter.write(item.toString());
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+            }
+        } catch (Exception e){
+
+        }
     }
 }
