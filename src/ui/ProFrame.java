@@ -7,6 +7,7 @@ import model.TableModel;
 import model.ToDoItem;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,42 +35,34 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
         setSize(width, height);
         setTitle("Prográmko 2");
 
-        setLayout(new BoxLayout(getContentPane(),1));
-
         JPanel toolbar = new JPanel();      //instance panelu
-        add(toolbar, BorderLayout.NORTH);
+        add(toolbar, BorderLayout.WEST);
         JPanel toolbar2 = new JPanel();
-        add(toolbar2);
+        add(toolbar2, BorderLayout.EAST);
 
-        JButton button = new JButton();     //tlacitko
-        button.setText("Přidat poznámku");
-        toolbar.add(button);
+        toolbar2.setLayout(new BorderLayout());
 
-        JButton loadbutton = new JButton();
-        loadbutton.setText("Načíst data");
-        toolbar.add(loadbutton);
+        JPanel topRight = new JPanel();
+        toolbar2.add(topRight, BorderLayout.NORTH);
 
-        JButton savebutton = new JButton();
-        savebutton.setText("Uložit data");
-        toolbar.add(savebutton);
+        JPanel centerRight = new JPanel();
+        toolbar2.add(centerRight, BorderLayout.CENTER);
 
-        button.addActionListener(action -> {
-            ToDoItem item = new ProDialog().getItem();     //nova instance prodialogu se zavolanim getItem
-            //model.add(item);
-        });
+        JPanel bottomRight = new JPanel();
+        toolbar2.add(bottomRight, BorderLayout.SOUTH);
 
-        loadbutton.addActionListener(action -> {
+        JButton setupButton = new JButton();
+        setupButton.setText("Nastavení");
+        bottomRight.add(setupButton, BorderLayout.CENTER);
+
+        setupButton.addActionListener(action -> {
             loadItems();
-        });
-
-        savebutton.addActionListener(action -> {
-            saveItems();
         });
 
         JTextField field = new JTextField("Vaše URL");
         JButton loadUrlBtn = new JButton("Načíst URL");
-        toolbar2.add(field);
-        toolbar2.add(loadUrlBtn);
+        topRight.add(field);
+        topRight.add(loadUrlBtn);
         loadUrlBtn.addActionListener(action ->{
             addFeed(field.getText());
             readFeeds();
@@ -77,7 +70,7 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
         model = new TableModel();
 
         JTable table = new JTable(model);
-        add(new JScrollPane(table), BorderLayout.CENTER);     //zajisteni scrollingu u tabulky
+        centerRight.add(new JScrollPane(table), BorderLayout.CENTER);     //zajisteni scrollingu u tabulky
         pack();
 
         setLocationRelativeTo(null);        //neni komponenta, ke ktere by se priblizil - otevreni na stredu obrazovky
