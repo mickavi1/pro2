@@ -35,42 +35,47 @@ public class ProFrame extends JFrame {      //rozsireni o JFrame
         setSize(width, height);
         setTitle("Prográmko 2");
 
+        setLayout(new BoxLayout(getContentPane(),1));
         JPanel toolbar = new JPanel();      //instance panelu
-        add(toolbar, BorderLayout.WEST);
+        add(toolbar, BorderLayout.NORTH);
         JPanel toolbar2 = new JPanel();
-        add(toolbar2, BorderLayout.EAST);
+        add(toolbar2);
 
-        toolbar2.setLayout(new BorderLayout());
+        JButton button = new JButton();
+        button.setText("Přidat poznámku");
+        toolbar.add(button);
 
-        JPanel topRight = new JPanel();
-        toolbar2.add(topRight, BorderLayout.NORTH);
+        JButton saveButton = new JButton();
+        saveButton.setText("Uložit");
+        toolbar.add(saveButton);
 
-        JPanel centerRight = new JPanel();
-        toolbar2.add(centerRight, BorderLayout.CENTER);
+        JButton loadButton = new JButton();
+        loadButton.setText("Načíst");
+        toolbar.add(loadButton);
 
-        JPanel bottomRight = new JPanel();
-        toolbar2.add(bottomRight, BorderLayout.SOUTH);
+        button.addActionListener(action -> {
+            ToDoItem item = new ProDialog().getItem();
+            model.add(item);
+        });
 
-        JButton setupButton = new JButton();
-        setupButton.setText("Nastavení");
-        bottomRight.add(setupButton, BorderLayout.CENTER);
-
-        setupButton.addActionListener(action -> {
+        saveButton.addActionListener(action -> {
+            saveItems();
+        });
+        loadButton.addActionListener(action -> {
             loadItems();
         });
 
         JTextField field = new JTextField("Vaše URL");
         JButton loadUrlBtn = new JButton("Načíst URL");
-        topRight.add(field);
-        topRight.add(loadUrlBtn);
+        toolbar2.add(field);
+        toolbar2.add(loadUrlBtn);
         loadUrlBtn.addActionListener(action ->{
             addFeed(field.getText());
-            readFeeds();
         });
         model = new TableModel();
 
         JTable table = new JTable(model);
-        centerRight.add(new JScrollPane(table), BorderLayout.CENTER);     //zajisteni scrollingu u tabulky
+        add(new JScrollPane(table), BorderLayout.CENTER);     //zajisteni scrollingu u tabulky
         pack();
 
         setLocationRelativeTo(null);        //neni komponenta, ke ktere by se priblizil - otevreni na stredu obrazovky

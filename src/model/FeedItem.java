@@ -7,6 +7,17 @@ public class FeedItem {
     boolean shouldShow;
     String alias;
 
+    private FeedItem(){
+
+    }
+
+    public FeedItem(String url){
+        this.url = url;
+        this.shouldShow = true;
+        this.adddedTime = System.currentTimeMillis();
+        this.alias = "Alias todo";
+    }
+
     public String getUrl() {
         return url;
     }

@@ -11,7 +11,7 @@ public class TableModel extends AbstractTableModel {
 
     public TableModel()
     {
-        items = new ArrayList<>();      //implementace arralistu do tabulky
+        items = new ArrayList<>();      //implementace arraylistu do tabulky
     }
 
     public void add(ToDoItem item)
