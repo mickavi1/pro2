@@ -3,7 +3,7 @@ package RSS;
 public class RSSitem {
 
     //atributy
-    private String title, link, description;
+    private String title, link, description, pubDate;
 
     public void setTitle(String title) {
         this.title = title;
@@ -17,6 +17,8 @@ public class RSSitem {
         this.description = description;
     }
 
+    public void setPubDate(String pubDate) { this.pubDate = pubDate; }
+
     public String getTitle() {
         return title;
     }
@@ -27,6 +29,10 @@ public class RSSitem {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getPubDate() {
+        return pubDate;
     }
 
     @Override

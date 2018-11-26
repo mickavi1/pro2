@@ -10,6 +10,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.net.URL;
 import java.net.URLConnection;
@@ -35,6 +38,8 @@ public class RssFrame extends JFrame {
             List<FeedItem> items = Utils.getAllFeeds();     //nacteni feed items
             new TableDialog(items).open();
             Utils.saveAllFeeds(items);
+
+            loadCards();
         });
         controlPanel.add(editButton, BorderLayout.WEST);
 
@@ -42,17 +47,64 @@ public class RssFrame extends JFrame {
 
         content = new JPanel(new WrapLayout());
 
-        test(); //fixme - bude notno po pridavani cardview volat refresh
+        loadCards();
 
         add(new JScrollPane(content), BorderLayout.CENTER);
 
         setVisible(true);
 
     }
+    //todo - async
+    private void loadCards(){
+        content.removeAll();
+        List<RSSitem> list = loadItems();
+        for (RSSitem rssItem : list){
+            content.add(new CardView(rssItem));
+        }
+        content.updateUI();
+    }
 
-    private void test(){
+    private List<RSSitem> loadItems(){
+        List<RSSitem> list = new ArrayList<>();
 
-        try{
+        List<FeedItem> allFeeds = Utils.getAllFeeds();
+        for (FeedItem feed: allFeeds){
+            if (feed.isShouldShow()){
+                loadFromFeedItem(list, feed);
+            }
+        }
+
+
+        Collections.sort(list, (o1, o2) -> {
+            long millis1 = Utils.getMillisFromDateString(o1.getPubDate());
+            long millis2 = Utils.getMillisFromDateString(o2.getPubDate());
+            return Long.compare(millis2, millis1);
+        });
+        //todo - sorting - comparator
+        //todo - filtry - nastavitelne
+
+        return list;
+    }
+
+    private void loadFromFeedItem(List<RSSitem> items, FeedItem item) {
+        //TODO validace URL
+        //pokud obsahuje http, nebude se pokracovat a pokracuje se dale v programu
+        if (!item.getUrl().contains("http")) {
+            return;
+        }
+
+        try {
+            URLConnection conn = new URL(item.getUrl()).openConnection();
+            items.addAll(new RSSParser(conn.getInputStream()).parseItems());
+            conn.getInputStream().close();  //uzavreni spojeni
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+        @Deprecated
+        private void test() {
+            try {
             /*
             URLConnection connection = new URL("src\\data\\download.xml").openConnection();
             connection.connect();
@@ -63,13 +115,12 @@ public class RssFrame extends JFrame {
 
             List<RSSitem> items = new RSSParser(is).parseItems();
 
-            for (RSSitem item: items){
+            for (RSSitem item : items) {
                 content.add(new CardView(item));
             }
-            content.doLayout();
-
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-}
+

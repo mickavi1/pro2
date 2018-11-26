@@ -36,6 +36,6 @@ public class ToDoItem implements Serializable {
     }
 
     public void setContent(String aValue) {
-        content = aValue;
+        this.content = aValue;
     }
 }

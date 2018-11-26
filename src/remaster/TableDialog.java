@@ -28,8 +28,12 @@ public class TableDialog extends JDialog {
         toolbar.add(urlField, BorderLayout.CENTER);
         urlField.setPreferredSize(new Dimension(300,30));
 
+        JPanel btnLayout = new JPanel(new FlowLayout());
         JButton addButton = new JButton("Přidat");
-        toolbar.add(addButton, BorderLayout.WEST);
+        JButton removeButton = new JButton("Smazat");
+        btnLayout.add(addButton);
+        btnLayout.add(removeButton);
+        toolbar.add(btnLayout, BorderLayout.WEST);
         addButton.addActionListener(action ->{
             model.add(new FeedItem(urlField.getText()));
             urlField.setText("");
@@ -41,6 +45,9 @@ public class TableDialog extends JDialog {
         model.setItems(feedItems);
         JTable table = new JTable(model);
         add(new JScrollPane(table), BorderLayout.CENTER);
+        removeButton.addActionListener(a ->{
+            model.remove(table.getSelectedRow());
+        });
 
         finishButton.addActionListener(action ->{
             setVisible(false);

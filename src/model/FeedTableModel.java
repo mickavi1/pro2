@@ -6,8 +6,6 @@ import java.util.List;
 
 public class FeedTableModel extends AbstractTableModel {
 
-    //TODO - pole sloupcu, List  FeedItem; doplnit potrebne metody jako u TableModel; chceme videt 2 sloupce URL, ShouldShow; Should show sloupec lze upravovat
-
     List<FeedItem> items;
     String[] columns = new String[]{"URL","ShouldShow"};
 
@@ -15,19 +13,22 @@ public class FeedTableModel extends AbstractTableModel {
         items = new ArrayList<>();
     }
 
-    public  void add (FeedItem item)
+    public void add (FeedItem item)
     {
         items.add(item);
         fireTableDataChanged();
     }
 
-    public void setItems(List<FeedItem> items){
-        this.items = items;
+    public void remove(int position){
+        if (position < 0 || position >= items.size()){
+            return;
+        }
+        items.remove(position);
+        fireTableDataChanged();
     }
 
-    public List<FeedItem> getItems()
-    {
-        return items;
+    public void setItems(List<FeedItem> items){
+        this.items = items;
     }
 
     @Override
@@ -44,8 +45,8 @@ public class FeedTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex)
         {
-            case 0: return items.get(columnIndex).getUrl();
-            case 1: return items.get(columnIndex).isShouldShow();
+            case 0: return items.get(rowIndex).getUrl();
+            case 1: return items.get(rowIndex).isShouldShow();
         }
         return null;
     }

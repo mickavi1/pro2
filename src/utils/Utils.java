@@ -3,8 +3,10 @@ package utils;
 import model.FeedItem;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.*;
 
 public class Utils {
     //metoda pro ukladani feed items
@@ -42,5 +44,16 @@ public class Utils {
             e.printStackTrace();
         }
         return feedItems;
+    }
+
+    public static long getMillisFromDateString(String pubDate){
+        SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+        try {
+            Date date = format.parse(pubDate);
+            return date.getTime();
+        } catch (ParseException e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 }
